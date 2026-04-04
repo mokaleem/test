@@ -57,6 +57,37 @@ const priorityConfig = {
   },
 };
 
+const mockIssue = {
+  priority: "critical" as const,
+  title: "LTE Network Degradation in Metropolitan Area",
+  sites: 23,
+  users: 600,
+  description:
+    "Multiple cell towers in the downtown metropolitan area are experiencing intermittent signal loss and reduced throughput. The issue started at 14:30 UTC and is affecting both voice and data services, with packet loss rates exceeding 25% during peak hours.",
+  aiRecommendation:
+    "Analysis suggests RF interference from nearby construction activity. Recommend immediate power level adjustment on affected sectors and deployment of portable COW (Cell on Wheels) units to maintain service continuity. Estimated resolution time: 4-6 hours with recommended actions.",
+  affectedKPIs: [
+    "Packet Loss Rate",
+    "Call Drop Rate",
+    "Throughput",
+    "RSRP",
+    "SINR",
+    "RRC Connection Success",
+    "Handover Success Rate",
+    "E-RAB Setup Success",
+  ],
+  impactedCustomers:
+    "Premium enterprise customers in financial district, approximately 600 active users experiencing degraded service quality with increased complaint tickets.",
+  impactedSites: [
+    { enodeb: "eNB_45782", sector: "Alpha-1", carrier: "L1800" },
+    { enodeb: "eNB_45783", sector: "Alpha-2", carrier: "L2100" },
+    { enodeb: "eNB_45784", sector: "Beta-1", carrier: "L1800" },
+    { enodeb: "eNB_45785", sector: "Beta-3", carrier: "L2600" },
+    { enodeb: "eNB_45786", sector: "Gamma-2", carrier: "L1800" },
+    { enodeb: "eNB_45787", sector: "Delta-1", carrier: "L2100" },
+  ],
+};
+
 export function NetworkIssueCardVariant2({ issue }: NetworkIssueCardVariant2Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const config = priorityConfig[issue.priority];
