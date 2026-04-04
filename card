@@ -1,0 +1,280 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  ChevronDown,
+  AlertTriangle,
+  Users,
+  MapPin,
+  TrendingDown,
+  Sparkles,
+  Radio,
+  Wrench,
+} from "lucide-react";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
+
+type PriorityLevel = "critical" | "medium" | "low";
+
+interface NetworkIssue {
+  priority: PriorityLevel;
+  title: string;
+  sites: number;
+  users: number;
+  description: string;
+  aiRecommendation: string;
+  affectedKPIs: string[];
+  impactedCustomers: string;
+  impactedSites: Array<{
+    enodeb: string;
+    sector: string;
+    carrier: string;
+  }>;
+}
+
+interface NetworkIssueCardVariant2Props {
+  issue: NetworkIssue;
+}
+
+const priorityConfig = {
+  critical: {
+    label: "Critical",
+    color: "bg-red-500",
+    badgeVariant: "destructive" as const,
+    gradient: "from-red-50 to-red-100/30",
+  },
+  medium: {
+    label: "Medium",
+    color: "bg-orange-500",
+    badgeVariant: "default" as const,
+    gradient: "from-orange-50 to-orange-100/30",
+  },
+  low: {
+    label: "Low",
+    color: "bg-blue-500",
+    badgeVariant: "secondary" as const,
+    gradient: "from-blue-50 to-blue-100/30",
+  },
+};
+
+export function NetworkIssueCardVariant2({ issue }: NetworkIssueCardVariant2Props) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const config = priorityConfig[issue.priority];
+
+  const handleTroubleshoot = () => {
+    // Mock troubleshooting action
+    console.log("Starting troubleshooting workflow...");
+  };
+
+  return (
+    <motion.div
+      layout
+      className="relative w-full max-w-[1248px] mx-auto overflow-hidden rounded-2xl bg-white shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-300"
+    >
+      {/* Decorative gradient accent */}
+      <div
+        className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${
+          issue.priority === "critical"
+            ? "from-red-500 via-red-600 to-red-500"
+            : issue.priority === "medium"
+            ? "from-orange-500 via-orange-600 to-orange-500"
+            : "from-blue-500 via-blue-600 to-blue-500"
+        }`}
+      />
+
+      <div className="p-6 sm:p-8">
+        {/* Header Section - Everything in One Line */}
+        <div className="flex flex-wrap items-center gap-3 mb-6">
+          <h2 className="text-2xl font-semibold text-gray-900 flex-1 min-w-0">
+            {issue.title}
+          </h2>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <MapPin className="w-4 h-4" />
+              <span className="font-medium">{issue.sites} sites</span>
+            </div>
+            <span className="text-gray-300">|</span>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Users className="w-4 h-4" />
+              <span className="font-medium">{issue.users} users</span>
+            </div>
+            <Badge variant={config.badgeVariant} className="text-sm px-3 py-1">
+              {config.label}
+            </Badge>
+          </div>
+        </div>
+
+        {/* Issue Description */}
+        <div className="mb-5">
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 border border-gray-200">
+            <AlertTriangle className="w-5 h-5 text-gray-700 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-medium text-gray-900 mb-1">
+                Network Issue
+              </p>
+              <p className="text-sm text-gray-700 leading-relaxed">
+                {issue.description}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* AI Recommendation */}
+        <div className="mb-6">
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/50 border border-purple-200">
+            <Sparkles className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-medium text-purple-900 mb-1">
+                AI Recommendation
+              </p>
+              <p className="text-sm text-purple-800 leading-relaxed">
+                {issue.aiRecommendation}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Button
+            onClick={() => setIsExpanded(!isExpanded)}
+            variant="outline"
+            className="gap-2 group"
+          >
+            {isExpanded ? "Hide Details" : "View Details"}
+            <motion.div
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ChevronDown className="w-4 h-4" />
+            </motion.div>
+          </Button>
+
+          <Button
+            onClick={handleTroubleshoot}
+            className="gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-md"
+          >
+            <Wrench className="w-4 h-4" />
+            Troubleshoot
+          </Button>
+        </div>
+
+        {/* Expanded Details */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <div className="mt-8 space-y-8">
+                {/* Affected KPIs */}
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <TrendingDown className="w-5 h-5 text-gray-700" />
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Affected KPIs
+                    </h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {issue.affectedKPIs.map((kpi, index) => (
+                      <Badge
+                        key={index}
+                        variant="outline"
+                        className="px-3 py-1.5 bg-gradient-to-r from-indigo-50 to-purple-50 border-indigo-200 text-indigo-700"
+                      >
+                        {kpi}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Impacted Customer Details */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Users className="w-5 h-5 text-gray-700" />
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Impacted Customers
+                    </h3>
+                  </div>
+                  <p className="text-sm text-gray-700 bg-amber-50 border border-amber-200 rounded-lg p-4">
+                    {issue.impactedCustomers}
+                  </p>
+                </div>
+
+                {/* Map */}
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <MapPin className="w-5 h-5 text-gray-700" />
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Affected Locations
+                    </h3>
+                  </div>
+                  <div className="rounded-xl overflow-hidden border border-gray-200 shadow-md">
+                    <ImageWithFallback
+                      src="https://images.unsplash.com/photo-1659782229445-19a69f10f6d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWxlY29tJTIwbmV0d29yayUyMG1hcCUyMHRvcG9sb2d5fGVufDF8fHx8MTc3NTM0MDE4OXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                      alt="Network map showing affected locations"
+                      className="w-full h-64 object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* Impacted Site Details */}
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Radio className="w-5 h-5 text-gray-700" />
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Impacted Site Details
+                    </h3>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {issue.impactedSites.map((site, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="p-5 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 hover:shadow-md transition-shadow"
+                      >
+                        <div className="space-y-3">
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                              eNodeB
+                            </p>
+                            <p className="text-sm font-semibold text-gray-900">
+                              {site.enodeb}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="flex-1">
+                              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                                Sector
+                              </p>
+                              <p className="text-sm font-medium text-gray-900">
+                                {site.sector}
+                              </p>
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                                Carrier
+                              </p>
+                              <p className="text-sm font-medium text-gray-900">
+                                {site.carrier}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+}
