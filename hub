@@ -1,0 +1,269 @@
+import { Link } from "react-router";
+import { agents } from "../data/agents";
+import {
+  Activity,
+  Shield,
+  GitBranch,
+  Camera,
+  TrendingUp,
+  Radio,
+  Zap,
+  Sparkles,
+  ChevronRight,
+} from "lucide-react";
+import { Badge } from "../components/ui/badge";
+import { motion } from "motion/react";
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Activity,
+  Shield,
+  GitBranch,
+  Camera,
+  TrendingUp,
+  Radio,
+};
+
+export function AgentHub() {
+  const autonomousAgents = agents.filter((a) => a.type === "autonomous");
+  const onDemandAgents = agents.filter((a) => a.type === "on-demand");
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-[1400px] mx-auto px-6 py-8">
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-4xl font-bold text-gray-900 flex items-center gap-3">
+              <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              Agent Hub
+            </h1>
+            <Link to="/demo">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2 text-sm bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 rounded-lg border border-gray-300 transition-all"
+              >
+                View Network Issue Demo
+              </motion.button>
+            </Link>
+          </div>
+          <p className="text-gray-600 text-lg">
+            Intelligent automation and productivity tools for network operations
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-[1400px] mx-auto px-6 py-12">
+        {/* Autonomous Agents Section */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <Zap className="w-6 h-6 text-indigo-600" />
+            <h2 className="text-2xl font-bold text-gray-900">
+              Autonomous Agents
+            </h2>
+            <Badge
+              variant="secondary"
+              className="bg-indigo-100 text-indigo-700 border-indigo-200"
+            >
+              {autonomousAgents.length} Active
+            </Badge>
+          </div>
+          <p className="text-gray-600 mb-8">
+            Self-running agents that continuously monitor and optimize your
+            network
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {autonomousAgents.map((agent, index) => {
+              const IconComponent = iconMap[agent.icon] || Activity;
+              return (
+                <Link key={agent.id} to={`/agent/${agent.id}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ y: -4 }}
+                    className="group relative bg-white rounded-2xl p-6 border-2 border-gray-200 hover:border-indigo-300 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden"
+                  >
+                    {/* Gradient accent */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+
+                    {/* Active indicator */}
+                    {agent.isActive && (
+                      <div className="absolute top-4 right-4">
+                        <div className="flex items-center gap-2 bg-green-50 text-green-700 px-2.5 py-1 rounded-full text-xs font-medium border border-green-200">
+                          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                          Active
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Icon and Title in one row */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl group-hover:scale-110 transition-transform flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                        {agent.name}
+                      </h3>
+                    </div>
+
+                    {/* Content */}
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                      {agent.description}
+                    </p>
+
+                    {/* Stats */}
+                    {agent.metrics && (
+                      <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                        <div>
+                          <span className="font-semibold text-gray-900">
+                            {agent.metrics.executionsToday}
+                          </span>{" "}
+                          runs
+                        </div>
+                        <div>
+                          <span className="font-semibold text-green-600">
+                            {agent.metrics.successRate}%
+                          </span>{" "}
+                          success
+                        </div>
+                        <div>
+                          Avg:{" "}
+                          <span className="font-semibold text-gray-900">
+                            {agent.metrics.avgExecutionTime}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Skills preview */}
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {agent.skills.slice(0, 3).map((skill, i) => (
+                        <span
+                          key={i}
+                          className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-md"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {agent.skills.length > 3 && (
+                        <span className="text-xs px-2 py-1 bg-gray-100 text-gray-500 rounded-md">
+                          +{agent.skills.length - 3} more
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Arrow - moved to the right */}
+                    <div className="flex items-center justify-end text-indigo-600 text-sm font-medium group-hover:gap-2 transition-all">
+                      View Details
+                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* On Demand Productivity Section */}
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <Activity className="w-6 h-6 text-purple-600" />
+            <h2 className="text-2xl font-bold text-gray-900">
+              On Demand Productivity
+            </h2>
+            <Badge
+              variant="secondary"
+              className="bg-purple-100 text-purple-700 border-purple-200"
+            >
+              {onDemandAgents.length} Tools
+            </Badge>
+          </div>
+          <p className="text-gray-600 mb-8">
+            Run powerful network analysis and optimization tasks whenever you
+            need them
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {onDemandAgents.map((agent, index) => {
+              const IconComponent = iconMap[agent.icon] || Activity;
+              return (
+                <Link key={agent.id} to={`/agent/${agent.id}`}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ y: -4 }}
+                    className="group relative bg-white rounded-2xl p-6 border-2 border-gray-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden"
+                  >
+                    {/* Gradient accent */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500" />
+
+                    {/* Icon and Title in one row */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="p-2.5 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl group-hover:scale-110 transition-transform flex-shrink-0">
+                        <IconComponent className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">
+                        {agent.name}
+                      </h3>
+                    </div>
+
+                    {/* Content */}
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                      {agent.description}
+                    </p>
+
+                    {/* Stats */}
+                    {agent.metrics && (
+                      <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                        <div>
+                          <span className="font-semibold text-gray-900">
+                            {agent.metrics.executionsToday}
+                          </span>{" "}
+                          runs
+                        </div>
+                        <div>
+                          Avg:{" "}
+                          <span className="font-semibold text-gray-900">
+                            {agent.metrics.avgExecutionTime}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Skills preview */}
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {agent.skills.slice(0, 3).map((skill, i) => (
+                        <span
+                          key={i}
+                          className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-md"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {agent.skills.length > 3 && (
+                        <span className="text-xs px-2 py-1 bg-gray-100 text-gray-500 rounded-md">
+                          +{agent.skills.length - 3} more
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Arrow - moved to the right */}
+                    <div className="flex items-center justify-end text-purple-600 text-sm font-medium group-hover:gap-2 transition-all">
+                      View Details
+                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
