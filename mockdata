@@ -1,0 +1,370 @@
+export interface Agent {
+  id: string;
+  name: string;
+  type: "autonomous" | "on-demand";
+  description: string;
+  icon: string;
+  isActive?: boolean;
+  skills: string[];
+  capabilities: Array<{
+    name: string;
+    description: string;
+    icon: string;
+  }>;
+  recentActivity: Array<{
+    id: string;
+    action: string;
+    timestamp: string;
+    status: "success" | "warning" | "error";
+    details: string;
+  }>;
+  metrics?: {
+    executionsToday: number;
+    successRate: number;
+    avgExecutionTime: string;
+  };
+}
+
+export const agents: Agent[] = [
+  {
+    id: "network-analyzer",
+    name: "Network Analyzer",
+    type: "autonomous",
+    description: "Continuously monitors network performance and identifies anomalies in real-time across all cell sites.",
+    icon: "Activity",
+    isActive: true,
+    skills: [
+      "Real-time KPI Monitoring",
+      "Anomaly Detection",
+      "Predictive Analytics",
+      "Performance Trending",
+      "Alert Generation",
+    ],
+    capabilities: [
+      {
+        name: "Multi-Layer Analysis",
+        description: "Analyzes network performance across RAN, Core, and Transport layers simultaneously",
+        icon: "Layers",
+      },
+      {
+        name: "ML-Powered Insights",
+        description: "Uses machine learning to identify patterns and predict network degradation before it occurs",
+        icon: "Brain",
+      },
+      {
+        name: "Auto-Remediation",
+        description: "Automatically triggers corrective actions for common network issues",
+        icon: "Zap",
+      },
+      {
+        name: "Custom Thresholds",
+        description: "Configurable KPI thresholds based on your network's specific requirements",
+        icon: "Sliders",
+      },
+    ],
+    recentActivity: [
+      {
+        id: "1",
+        action: "Detected high packet loss in Metro Region",
+        timestamp: "2 minutes ago",
+        status: "warning",
+        details: "25 sites affected, average packet loss: 12%",
+      },
+      {
+        id: "2",
+        action: "Optimized carrier aggregation settings",
+        timestamp: "15 minutes ago",
+        status: "success",
+        details: "Improved throughput by 23% in Downtown area",
+      },
+      {
+        id: "3",
+        action: "Generated daily performance report",
+        timestamp: "1 hour ago",
+        status: "success",
+        details: "Analyzed 1,247 sites, 99.2% availability",
+      },
+    ],
+    metrics: {
+      executionsToday: 1847,
+      successRate: 98.5,
+      avgExecutionTime: "2.3s",
+    },
+  },
+  {
+    id: "ran-guardian",
+    name: "RAN Guardian",
+    type: "autonomous",
+    description: "Protects and optimizes Radio Access Network performance with intelligent automation and security monitoring.",
+    icon: "Shield",
+    isActive: true,
+    skills: [
+      "RF Interference Detection",
+      "Cell Outage Management",
+      "Neighbor Optimization",
+      "Coverage Analysis",
+      "Security Monitoring",
+    ],
+    capabilities: [
+      {
+        name: "Smart Cell Management",
+        description: "Automatically manages cell parameters for optimal coverage and capacity",
+        icon: "Radio",
+      },
+      {
+        name: "Interference Mitigation",
+        description: "Identifies and resolves RF interference issues in real-time",
+        icon: "AlertTriangle",
+      },
+      {
+        name: "Self-Healing Network",
+        description: "Detects and recovers from cell outages without manual intervention",
+        icon: "RefreshCw",
+      },
+      {
+        name: "Performance Optimization",
+        description: "Continuously optimizes handover parameters and load balancing",
+        icon: "TrendingUp",
+      },
+    ],
+    recentActivity: [
+      {
+        id: "1",
+        action: "Resolved cell outage at Site_45732",
+        timestamp: "5 minutes ago",
+        status: "success",
+        details: "Automatic restart successful, service restored",
+      },
+      {
+        id: "2",
+        action: "Optimized neighbor relations for 12 sites",
+        timestamp: "32 minutes ago",
+        status: "success",
+        details: "Improved handover success rate by 8%",
+      },
+      {
+        id: "3",
+        action: "Detected potential interference",
+        timestamp: "1 hour ago",
+        status: "warning",
+        details: "Investigating external RF source near Site_45890",
+      },
+    ],
+    metrics: {
+      executionsToday: 2341,
+      successRate: 99.1,
+      avgExecutionTime: "1.8s",
+    },
+  },
+  {
+    id: "line-to-site",
+    name: "Line to Site",
+    type: "on-demand",
+    description: "Maps transport network connections to physical cell sites for comprehensive infrastructure visibility.",
+    icon: "GitBranch",
+    skills: [
+      "Topology Mapping",
+      "Connection Tracing",
+      "Path Analysis",
+      "Infrastructure Discovery",
+    ],
+    capabilities: [
+      {
+        name: "Network Topology",
+        description: "Visualizes complete network infrastructure from core to edge",
+        icon: "Network",
+      },
+      {
+        name: "Impact Analysis",
+        description: "Identifies affected sites when transport links fail",
+        icon: "Target",
+      },
+      {
+        name: "Route Optimization",
+        description: "Suggests optimal routing paths for better reliability",
+        icon: "Route",
+      },
+      {
+        name: "Documentation",
+        description: "Generates detailed infrastructure reports and diagrams",
+        icon: "FileText",
+      },
+    ],
+    recentActivity: [
+      {
+        id: "1",
+        action: "Mapped 450 new site connections",
+        timestamp: "Yesterday",
+        status: "success",
+        details: "Updated topology database with latest infrastructure",
+      },
+      {
+        id: "2",
+        action: "Generated topology report",
+        timestamp: "2 days ago",
+        status: "success",
+        details: "Exported network diagram for Metro Region",
+      },
+    ],
+    metrics: {
+      executionsToday: 0,
+      successRate: 100,
+      avgExecutionTime: "45s",
+    },
+  },
+  {
+    id: "enodeb-snap",
+    name: "eNodeB Snap",
+    type: "on-demand",
+    description: "Captures comprehensive snapshots of eNodeB configurations and performance metrics for analysis.",
+    icon: "Camera",
+    skills: [
+      "Configuration Backup",
+      "Performance Snapshot",
+      "Health Check",
+      "Compliance Audit",
+    ],
+    capabilities: [
+      {
+        name: "Full Config Capture",
+        description: "Captures complete eNodeB configuration including all parameters",
+        icon: "Database",
+      },
+      {
+        name: "Performance Metrics",
+        description: "Snapshots real-time KPIs and performance counters",
+        icon: "BarChart",
+      },
+      {
+        name: "Change Detection",
+        description: "Compares snapshots to identify configuration changes",
+        icon: "GitCompare",
+      },
+      {
+        name: "Quick Restore",
+        description: "Enables rapid rollback to previous configurations",
+        icon: "RotateCcw",
+      },
+    ],
+    recentActivity: [
+      {
+        id: "1",
+        action: "Captured snapshot of 156 eNodeBs",
+        timestamp: "3 hours ago",
+        status: "success",
+        details: "Pre-upgrade configuration backup completed",
+      },
+      {
+        id: "2",
+        action: "Compared configurations",
+        timestamp: "Yesterday",
+        status: "success",
+        details: "Found 23 configuration drifts, generated report",
+      },
+    ],
+    metrics: {
+      executionsToday: 3,
+      successRate: 100,
+      avgExecutionTime: "1.2m",
+    },
+  },
+  {
+    id: "capacity-predictor",
+    name: "Capacity Predictor",
+    type: "autonomous",
+    description: "Forecasts network capacity needs using AI-driven analysis of usage patterns and growth trends.",
+    icon: "TrendingUp",
+    isActive: false,
+    skills: [
+      "Traffic Forecasting",
+      "Growth Analysis",
+      "Resource Planning",
+      "Capacity Alerts",
+    ],
+    capabilities: [
+      {
+        name: "AI Forecasting",
+        description: "Predicts capacity needs up to 6 months in advance",
+        icon: "LineChart",
+      },
+      {
+        name: "Seasonal Patterns",
+        description: "Accounts for seasonal variations and special events",
+        icon: "Calendar",
+      },
+      {
+        name: "Site Prioritization",
+        description: "Identifies sites requiring urgent capacity upgrades",
+        icon: "Flag",
+      },
+      {
+        name: "Investment Planning",
+        description: "Generates capacity expansion roadmaps and cost estimates",
+        icon: "DollarSign",
+      },
+    ],
+    recentActivity: [
+      {
+        id: "1",
+        action: "Generated Q2 capacity forecast",
+        timestamp: "6 hours ago",
+        status: "success",
+        details: "Identified 34 sites requiring expansion",
+      },
+    ],
+    metrics: {
+      executionsToday: 0,
+      successRate: 97.8,
+      avgExecutionTime: "5.2m",
+    },
+  },
+  {
+    id: "spectrum-optimizer",
+    name: "Spectrum Optimizer",
+    type: "on-demand",
+    description: "Optimizes spectrum allocation and carrier configurations for maximum efficiency and throughput.",
+    icon: "Radio",
+    skills: [
+      "Spectrum Analysis",
+      "Carrier Planning",
+      "Interference Management",
+      "Efficiency Optimization",
+    ],
+    capabilities: [
+      {
+        name: "Dynamic Allocation",
+        description: "Automatically adjusts spectrum allocation based on demand",
+        icon: "Shuffle",
+      },
+      {
+        name: "Interference Analysis",
+        description: "Identifies and mitigates inter-carrier interference",
+        icon: "AlertCircle",
+      },
+      {
+        name: "Load Balancing",
+        description: "Optimizes traffic distribution across available spectrum",
+        icon: "Scale",
+      },
+      {
+        name: "Utilization Reports",
+        description: "Provides detailed spectrum utilization analytics",
+        icon: "PieChart",
+      },
+    ],
+    recentActivity: [
+      {
+        id: "1",
+        action: "Optimized spectrum for 89 sites",
+        timestamp: "4 hours ago",
+        status: "success",
+        details: "Improved average throughput by 18%",
+      },
+    ],
+    metrics: {
+      executionsToday: 2,
+      successRate: 95.5,
+      avgExecutionTime: "3.7m",
+    },
+  },
+];
